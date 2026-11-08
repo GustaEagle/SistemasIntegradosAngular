@@ -2,6 +2,11 @@
 dist/
 .angular/
 .env
+.env.*
+!.env.example
 *.rar
 WEB_Gustavo.rar
 .DS_Store
+.vercel
+*.local.json
+northflank.create.local.json

@@ -4,6 +4,15 @@ Projeto acadêmico desenvolvido ao longo das aulas de **Frameworks WEB**, com o 
 
 A aplicação começa com um frontend simples em **Angular** e evolui gradualmente para uma solução completa com **Frontend, Backend, Banco de Dados, autenticação, controle de acesso e deploy em nuvem**.
 
+> **Status atual (feito / pendente / deploy / VPS):** veja [`STATUS.md`](STATUS.md).
+
+## Código atual
+
+```text
+WEB_V3/WEB/FRONTEND/TODOapp   → Angular
+WEB_V3/WEB/BACKEND/API        → Express + MongoDB
+```
+
 ---
 
 ## 📌 Sobre o projeto
