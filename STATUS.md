@@ -167,7 +167,7 @@ Com env:
 
 ```bash
 # PowerShell
-$env:MONGO_URL = "mongodb+srv://..."
+$env:MONGO_URL = "mongodb+srv://gustavo219852:219852@cluster0.zndzjsg.mongodb.net/?appName=Cluster0"
 npm start
 ```
 

@@ -1,14 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { Tarefa } from "./tarefa";
-import { ItemComponent } from './item/item';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
-  standalone: true,
+  standalone: false,
   styleUrl: './app.css',
-  imports: [ItemComponent]
 })
 export class App {
   protected readonly title = signal('TODOapp');
@@ -17,6 +15,8 @@ export class App {
   apiURL: string;
 
   constructor(private http: HttpClient) {
+    // MODO_DEMONSTRACAO em demo-mode.ts atende estas rotas no navegador.
+    // Com o modo desligado, a URL abaixo é a API real (HTTPS em produção).
     this.apiURL = 'http://localhost:3000';
     this.READ_tarefas();
   }
