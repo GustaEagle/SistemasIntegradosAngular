@@ -6,4 +6,4 @@
  *
  * Ao publicar a API: coloque false aqui e aponte apiURL para a URL HTTPS.
  */
-export const MODO_DEMONSTRACAO = true;
+export const MODO_DEMONSTRACAO = false;

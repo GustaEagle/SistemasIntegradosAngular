@@ -17,7 +17,7 @@ export class App {
   constructor(private http: HttpClient) {
     // MODO_DEMONSTRACAO em demo-mode.ts atende estas rotas no navegador.
     // Com o modo desligado, a URL abaixo é a API real (HTTPS em produção).
-    this.apiURL = 'http://localhost:3000';
+    this.apiURL = 'https://http--api-tarefas--r7xyk2hxmmk7.code.run';
     this.READ_tarefas();
   }
 
