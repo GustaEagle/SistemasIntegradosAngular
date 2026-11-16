@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { Tarefa } from "./tarefa";
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -13,29 +13,44 @@ export class App {
 
   arrayDeTarefas = signal<Tarefa[]>([]);
   apiURL: string;
+  usuarioLogado = signal(false);
+  tokenJWT = '{ "token":""}';
 
   constructor(private http: HttpClient) {
-    // MODO_DEMONSTRACAO em demo-mode.ts atende estas rotas no navegador.
-    // Com o modo desligado, a URL abaixo é a API real (HTTPS em produção).
-    this.apiURL = 'https://http--api-tarefas--r7xyk2hxmmk7.code.run';
-    this.READ_tarefas();
+    // Local (Aula 10) — não usa a API do deploy
+    this.apiURL = 'http://localhost:3000';
+  }
+
+  login(username: string, password: string) {
+    var credenciais = { "nome": username, "senha": password }
+    this.http.post(`${this.apiURL}/api/login`, credenciais).subscribe(resultado => {
+      this.tokenJWT = JSON.stringify(resultado);
+      this.READ_tarefas();
+    });
+  }
+
+  private headersComToken() {
+    return new HttpHeaders().set("id-token", JSON.parse(this.tokenJWT).token);
   }
 
   READ_tarefas() {
-    this.http.get<Tarefa[]>(`${this.apiURL}/api/getAll`).subscribe(
-      resultado => this.arrayDeTarefas.set(resultado));
+    const idToken = this.headersComToken();
+    this.http.get<Tarefa[]>(`${this.apiURL}/api/getAll`, { 'headers': idToken }).subscribe({
+      next: (resultado) => { this.arrayDeTarefas.set(resultado); this.usuarioLogado.set(true) },
+      error: () => { this.usuarioLogado.set(false) }
+    })
   }
 
   CREATE_tarefa(descricaoNovaTarefa: string) {
     var novaTarefa = new Tarefa(descricaoNovaTarefa, false);
-     this.http.post<Tarefa>(`${this.apiURL}/api/post`, novaTarefa).subscribe(
+    this.http.post<Tarefa>(`${this.apiURL}/api/post`, novaTarefa, { 'headers': this.headersComToken() }).subscribe(
       resultado => { console.log(resultado); this.READ_tarefas(); });
   }
 
   DELETE_tarefa(tarefaAserRemovida: Tarefa) {
     var indice = this.arrayDeTarefas().indexOf(tarefaAserRemovida);
     var id = this.arrayDeTarefas()[indice]._id;
-    this.http.delete<Tarefa>(`${this.apiURL}/api/delete/${id}`).subscribe(
+    this.http.delete<Tarefa>(`${this.apiURL}/api/delete/${id}`, { 'headers': this.headersComToken() }).subscribe(
       resultado => { console.log(resultado); this.READ_tarefas(); });
   }
 
@@ -43,7 +58,7 @@ export class App {
     var indice = this.arrayDeTarefas().indexOf(tarefaAserModificada);
     var id = this.arrayDeTarefas()[indice]._id;
     this.http.patch<Tarefa>(`${this.apiURL}/api/update/${id}`,
-      tarefaAserModificada).subscribe(
+      tarefaAserModificada, { 'headers': this.headersComToken() }).subscribe(
         resultado => { console.log(resultado); this.READ_tarefas(); });
   }
 
